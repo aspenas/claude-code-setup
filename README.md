@@ -6,8 +6,8 @@ Complete setup guide for building AI-powered applications with Claude Code, AWS 
 
 ```bash
 # Clone this repository
-git clone https://github.com/candlefish-ai/claude-setup.git
-cd claude-setup
+git clone https://github.com/aspenas/claude-code-setup.git
+cd claude-code-setup
 
 # Run the setup script
 ./scripts/master-setup.sh
@@ -18,7 +18,7 @@ claude
 
 ## 📚 Documentation
 
-Full documentation is available at: https://docs.candlefish.ai
+Full documentation is available at: https://jonathon.candlefish.ai
 
 ### Guides Included:
 - **Complete Setup Guide** - Step-by-step environment setup
@@ -46,7 +46,8 @@ Full documentation is available at: https://docs.candlefish.ai
 
 ## 📞 Support
 
-- Documentation: https://docs.candlefish.ai
+- Documentation: https://jonathon.candlefish.ai
+- GitHub: https://github.com/aspenas/claude-code-setup
 - Email: patrick@candlefish.ai
 - Company: https://candlefish.ai
 
