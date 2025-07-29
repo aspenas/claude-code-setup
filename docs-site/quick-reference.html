@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quick Reference - Candlefish AI Documentation</title>
+    <meta name="description" content="Quick Reference for Claude Code development environment">
+    <meta property="og:title" content="Quick Reference - Candlefish AI">
+    <meta property="og:image" content="https://candlefish.ai/logo/candlefish_highquality.png">
+    <link rel="canonical" href="https://docs.candlefish.ai">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Berkeley+Mono&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Base styles from main site */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        :root {
+            --grid: 8px;
+            --container-max: 900px;
+            --color-black: #000000;
+            --color-white: #FFFFFF;
+            --color-teal: #00CED1;
+            --color-teal-dark: #00A5A8;
+            --color-gray-100: #0A0A0A;
+            --color-gray-200: #1A1A1A;
+            --color-gray-300: #2A2A2A;
+            --color-gray-400: #3A3A3A;
+            --color-gray-600: #8A8A8A;
+            --color-gray-700: #AAAAAA;
+            --font-mono: 'Berkeley Mono', 'Courier New', monospace;
+            --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+        
+        [data-theme="dark"] {
+            --bg-primary: var(--color-black);
+            --bg-secondary: var(--color-gray-100);
+            --bg-tertiary: var(--color-gray-200);
+            --text-primary: var(--color-white);
+            --text-secondary: var(--color-gray-700);
+            --text-tertiary: var(--color-gray-600);
+            --border-color: var(--color-gray-400);
+            --accent: var(--color-teal);
+        }
+        
+        body {
+            font-family: var(--font-sans);
+            font-size: 16px;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background-color: var(--bg-primary);
+            min-height: 100vh;
+        }
+        
+        /* Navigation */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: calc(var(--grid) * 3) 0;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .nav__container {
+            max-width: var(--container-max);
+            margin: 0 auto;
+            padding: 0 calc(var(--grid) * 3);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .nav__logo {
+            display: flex;
+            align-items: center;
+            gap: calc(var(--grid) * 2);
+            text-decoration: none;
+            color: var(--text-primary);
+        }
+        
+        .nav__logo img {
+            width: 40px;
+            height: 40px;
+        }
+        
+        /* Main content */
+        .doc-container {
+            max-width: var(--container-max);
+            margin: 0 auto;
+            padding: calc(var(--grid) * 15) calc(var(--grid) * 3);
+            min-height: 100vh;
+        }
+        
+        .doc-header {
+            margin-bottom: calc(var(--grid) * 6);
+            padding-bottom: calc(var(--grid) * 4);
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .doc-title {
+            font-size: 3rem;
+            font-weight: 300;
+            letter-spacing: -0.02em;
+            margin-bottom: calc(var(--grid) * 2);
+        }
+        
+        .doc-meta {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+        
+        /* Content styles */
+        .doc-content h1 {
+            font-size: 2.5rem;
+            font-weight: 300;
+            margin: calc(var(--grid) * 6) 0 calc(var(--grid) * 3) 0;
+            color: var(--accent);
+        }
+        
+        .doc-content h2 {
+            font-size: 2rem;
+            font-weight: 400;
+            margin: calc(var(--grid) * 5) 0 calc(var(--grid) * 2) 0;
+        }
+        
+        .doc-content h3 {
+            font-size: 1.5rem;
+            font-weight: 500;
+            margin: calc(var(--grid) * 4) 0 calc(var(--grid) * 2) 0;
+        }
+        
+        .doc-content h4 {
+            font-size: 1.25rem;
+            font-weight: 500;
+            margin: calc(var(--grid) * 3) 0 calc(var(--grid) * 2) 0;
+        }
+        
+        .doc-content p {
+            margin-bottom: calc(var(--grid) * 2);
+            color: var(--text-secondary);
+        }
+        
+        .doc-content ul, .doc-content ol {
+            margin: 0 0 calc(var(--grid) * 3) calc(var(--grid) * 3);
+            color: var(--text-secondary);
+        }
+        
+        .doc-content li {
+            margin-bottom: calc(var(--grid) * 1);
+        }
+        
+        .doc-content code {
+            font-family: var(--font-mono);
+            font-size: 0.875rem;
+            background: var(--bg-tertiary);
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: var(--accent);
+        }
+        
+        .doc-content pre {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: calc(var(--grid) * 3);
+            margin: calc(var(--grid) * 3) 0;
+            overflow-x: auto;
+        }
+        
+        .doc-content pre code {
+            background: none;
+            padding: 0;
+            color: var(--text-primary);
+            display: block;
+            line-height: 1.6;
+        }
+        
+        .doc-content blockquote {
+            border-left: 4px solid var(--accent);
+            padding-left: calc(var(--grid) * 3);
+            margin: calc(var(--grid) * 3) 0;
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+        
+        .doc-content a {
+            color: var(--accent);
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.2s;
+        }
+        
+        .doc-content a:hover {
+            border-bottom-color: var(--accent);
+        }
+        
+        .doc-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: calc(var(--grid) * 3) 0;
+        }
+        
+        .doc-content th, .doc-content td {
+            padding: calc(var(--grid) * 2);
+            border: 1px solid var(--border-color);
+            text-align: left;
+        }
+        
+        .doc-content th {
+            background: var(--bg-tertiary);
+            font-weight: 500;
+        }
+        
+        /* Back to docs link */
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: calc(var(--grid) * 1);
+            color: var(--text-secondary);
+            text-decoration: none;
+            margin-bottom: calc(var(--grid) * 4);
+            transition: color 0.2s;
+        }
+        
+        .back-link:hover {
+            color: var(--accent);
+        }
+        
+        /* Footer */
+        .footer {
+            margin-top: calc(var(--grid) * 10);
+            padding-top: calc(var(--grid) * 4);
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            color: var(--text-tertiary);
+            font-size: 0.875rem;
+        }
+        
+        .footer a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav__container">
+            <a href="index.html" class="nav__logo">
+                <img src="https://candlefish.ai/logo/candlefish_highquality.webp" alt="Candlefish AI">
+                <span>Documentation</span>
+            </a>
+        </div>
+    </nav>
+    
+    <!-- Main Content -->
+    <div class="doc-container">
+        <a href="index.html" class="back-link">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M19 12H5M12 19l-7-7 7-7"/>
+            </svg>
+            Back to Documentation
+        </a>
+        
+        <header class="doc-header">
+            <h1 class="doc-title">Quick Reference</h1>
+            <div class="doc-meta">By Patrick Smith (patrick@candlefish.ai) - Candlefish AI</div>
+        </header>
+        
+        <div class="doc-content">
+            <h1>Jonathon's Quick Reference Guide</h1>
+
+<em>By Patrick Smith (patrick@candlefish.ai) - Candlefish AI</em>
+
+<h2>Claude Code Commands</h2>
+
+<h3>Basic Usage</h3>
+``<code>bash
+c                          # Start Claude Code (alias)
+claude                     # Start Claude Code
+claude-max                 # Max context (200k tokens)
+claude-think              # Step-by-step thinking mode
+claude-code               # Full command
+
+<h1>With options</h1>
+claude --model claude-opus-4-20250514
+claude --context 100k
+claude --thinking
+claude --verbose
+</code>`<code>
+
+<h3>Project Navigation</h3>
+</code>`<code>bash
+claude-project myapp       # Open project in Claude
+claude --cwd ./path       # Specific directory
+cd ~/projects && claude   # Navigate then start
+</code>`<code>
+
+<h2>Essential Terminal Commands</h2>
+
+<h3>File Operations</h3>
+</code>`<code>bash
+ls -la                    # List all files with details
+cd ~/projects             # Change directory
+mkdir -p path/to/dir      # Create nested directories
+touch filename.txt        # Create empty file
+rm -rf directory          # Remove directory (careful!)
+cp -r source dest         # Copy recursively
+mv old new               # Move/rename
+</code>`<code>
+
+<h3>Git Essentials</h3>
+</code>`<code>bash
+git init                  # Initialize repository
+git add .                 # Stage all changes
+git commit -m "message"   # Commit with message
+git push origin main      # Push to remote
+git pull                  # Pull latest changes
+git status               # Check status
+git log --oneline        # View commit history
+git checkout -b feature  # Create new branch
+</code>`<code>
+
+<h3>Process Management</h3>
+</code>`<code>bash
+ps aux | grep node       # Find Node processes
+kill -9 PID             # Force kill process
+lsof -i :3000           # Find process on port
+pkill -f "node"         # Kill by name pattern
+top                     # System monitor
+htop                    # Better system monitor
+</code>`<code>
+
+<h2>Development Workflows</h2>
+
+<h3>Start New Project</h3>
+</code>`<code>bash
+<h1>Next.js + TypeScript</h1>
+~/.claude/templates/create-nextjs-project.sh myapp
+
+<h1>Python FastAPI</h1>
+~/.claude/templates/create-python-project.sh myapi
+
+<h1>From Candlefish template</h1>
+~/candlefish-ai/projects/jonathon/templates/create-candlefish-project.sh myproject
+</code>`<code>
+
+<h3>Daily Development</h3>
+</code>`<code>bash
+<h1>1. Load secrets</h1>
+source ~/.jonathon/scripts/load-secrets.sh
+
+<h1>2. Start project</h1>
+cd ~/projects/myapp
+pnpm dev
+
+<h1>3. Open Claude in project</h1>
+claude
+
+<h1>4. Run tests</h1>
+pnpm test
+</code>`<code>
+
+<h3>Database Operations</h3>
+</code>`<code>bash
+<h1>Prisma</h1>
+pnpm prisma migrate dev   # Run migrations
+pnpm prisma studio       # Visual database editor
+pnpm prisma generate     # Generate client
+
+<h1>PostgreSQL</h1>
+psql -U user -d database # Connect to database
+pg_dump database > backup.sql
+</code>`<code>
+
+<h2>API Testing</h2>
+
+<h3>cURL Examples</h3>
+</code>`<code>bash
+<h1>GET request</h1>
+curl https://api.example.com/users
+
+<h1>POST with JSON</h1>
+curl -X POST https://api.example.com/users \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $API_KEY" \
+  -d '{"name": "John", "email": "john@example.com"}'
+
+<h1>With output formatting</h1>
+curl -s https://api.example.com/data | jq '.'
+</code>`<code>
+
+<h3>HTTPie (easier syntax)</h3>
+</code>`<code>bash
+<h1>GET</h1>
+http GET api.example.com/users
+
+<h1>POST</h1>
+http POST api.example.com/users \
+  name="John" email="john@example.com" \
+  "Authorization: Bearer $API_KEY"
+</code>`<code>
+
+<h2>AWS Commands</h2>
+
+<h3>Basic AWS CLI</h3>
+</code>`<code>bash
+<h1>Configure</h1>
+aws configure
+
+<h1>S3</h1>
+aws s3 ls                        # List buckets
+aws s3 cp file.txt s3://bucket/  # Upload file
+aws s3 sync . s3://bucket/path/  # Sync directory
+
+<h1>Secrets Manager</h1>
+aws secretsmanager get-secret-value --secret-id "name"
+aws secretsmanager create-secret --name "name" --secret-string "value"
+
+<h1>IAM</h1>
+aws iam create-user --user-name username
+aws iam create-access-key --user-name username
+</code>`<code>
+
+<h3>AWS Vault</h3>
+</code>`<code>bash
+aws-vault add profile         # Add credentials
+aws-vault exec profile -- cmd # Run with credentials
+aws-vault list               # List profiles
+aws-vault rotate profile     # Rotate credentials
+</code>`<code>
+
+<h2>Environment Management</h2>
+
+<h3>Node.js / npm / pnpm</h3>
+</code>`<code>bash
+<h1>Node version</h1>
+nvm install 20              # Install Node v20
+nvm use 20                 # Use Node v20
+nvm alias default 20       # Set default
+
+<h1>Package management</h1>
+pnpm install               # Install dependencies
+pnpm add package          # Add dependency
+pnpm add -D package       # Add dev dependency
+pnpm run script           # Run package.json script
+pnpm outdated            # Check for updates
+</code>`<code>
+
+<h3>Python</h3>
+</code>`<code>bash
+<h1>Virtual environment</h1>
+python3 -m venv venv      # Create venv
+source venv/bin/activate  # Activate venv
+deactivate               # Deactivate venv
+
+<h1>Poetry</h1>
+poetry init              # Initialize project
+poetry add package       # Add dependency
+poetry install           # Install all deps
+poetry run python app.py # Run with poetry
+</code>`<code>
+
+<h2>Security Quick Checks</h2>
+
+<h3>File Permissions</h3>
+</code>`<code>bash
+chmod 600 ~/.ssh/id_*     # Secure SSH keys
+chmod 644 public_file     # Public readable
+chmod 755 script.sh       # Executable script
+chmod 700 private_dir     # Private directory
+</code>`<code>
+
+<h3>Find Secrets</h3>
+</code>`<code>bash
+<h1>Search for potential secrets</h1>
+grep -r "api[_-]key" .
+grep -r "password" .
+grep -r "sk-" .          # API keys
+git secrets --scan       # Git secrets scan
+</code>`<code>
+
+<h2>Debugging</h2>
+
+<h3>Network</h3>
+</code>`<code>bash
+ping google.com          # Test connectivity
+nslookup domain.com      # DNS lookup
+dig domain.com           # Detailed DNS
+curl -I https://site.com # Check headers
+netstat -an | grep 3000  # Check port usage
+</code>`<code>
+
+<h3>Logs</h3>
+</code>`<code>bash
+tail -f logfile.log      # Follow log file
+tail -n 100 logfile.log  # Last 100 lines
+grep ERROR logfile.log   # Find errors
+journalctl -u service    # System service logs
+</code>`<code>
+
+<h2>VS Code Shortcuts</h2>
+
+<h3>Navigation</h3>
+</code>`<code>
+Cmd+P         # Quick file open
+Cmd+Shift+P   # Command palette
+Cmd+B         # Toggle sidebar
+Cmd+J         # Toggle terminal
+Cmd+\         # Split editor
+</code>`<code>
+
+<h3>Editing</h3>
+</code>`<code>
+Cmd+D         # Select next occurrence
+Cmd+Shift+L   # Select all occurrences
+Option+Up/Down # Move line up/down
+Cmd+/         # Toggle comment
+Cmd+Shift+[   # Fold code
+</code>`<code>
+
+<h3>Terminal</h3>
+</code>`<code>
+Ctrl+</code>        # Toggle terminal
+Cmd+K         # Clear terminal
+Ctrl+C        # Cancel command
+Ctrl+D        # Exit/EOF
+``<code>
+
+<h2>Docker Commands</h2>
+
+<h3>Basic</h3>
+</code>`<code>bash
+docker ps                 # List running containers
+docker ps -a             # List all containers
+docker images            # List images
+docker logs container    # View logs
+docker exec -it container bash # Enter container
+</code>`<code>
+
+<h3>Compose</h3>
+</code>`<code>bash
+docker-compose up        # Start services
+docker-compose down      # Stop services
+docker-compose logs -f   # Follow logs
+docker-compose ps        # List services
+</code>`<code>
+
+<h2>Emergency Commands</h2>
+
+<h3>Port Already in Use</h3>
+</code>`<code>bash
+<h1>Find and kill process on port 3000</h1>
+lsof -ti:3000 | xargs kill -9
+
+<h1>Alternative</h1>
+npx kill-port 3000
+</code>`<code>
+
+<h3>Clear npm/pnpm Cache</h3>
+</code>`<code>bash
+npm cache clean --force
+pnpm store prune
+rm -rf node_modules pnpm-lock.yaml
+pnpm install
+</code>`<code>
+
+<h3>Git Undo</h3>
+</code>`<code>bash
+git reset HEAD~1         # Undo last commit
+git checkout -- file.txt # Discard changes
+git clean -fd           # Remove untracked files
+git stash              # Temporarily save changes
+git stash pop          # Restore stashed changes
+</code>`<code>
+
+<h3>System Resources</h3>
+</code>`<code>bash
+<h1>Check disk space</h1>
+df -h
+
+<h1>Check memory</h1>
+free -h
+
+<h1>Find large files</h1>
+find . -size +100M
+
+<h1>Clear space</h1>
+brew cleanup
+docker system prune -a
+</code>`<code>
+
+<h2>Useful Aliases</h2>
+
+<p>Add to </code>~/.zshrc<code>:
+</code>`<code>bash
+<h1>Navigation</h1>
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ll='ls -la'
+alias projects='cd ~/projects'</p>
+
+<h1>Git</h1>
+alias gs='git status'
+alias gc='git commit -m'
+alias gp='git push'
+alias gl='git log --oneline'
+
+<h1>Development</h1>
+alias nr='npm run'
+alias pr='pnpm run'
+alias py='python3'
+alias dc='docker-compose'
+
+<h1>Claude</h1>
+alias c='claude'
+alias cmax='claude-max'
+alias cthink='claude-think'
+</code>`<code>
+
+<h2>One-Liners</h2>
+
+</code>`<code>bash
+<h1>Find and replace in files</h1>
+find . -name "*.js" -exec sed -i '' 's/old/new/g' {} +
+
+<h1>Delete all node_modules</h1>
+find . -name "node_modules" -type d -prune -exec rm -rf {} +
+
+<h1>List folder sizes</h1>
+du -sh */ | sort -hr
+
+<h1>Watch command output</h1>
+watch -n 2 'ps aux | grep node'
+
+<h1>Generate UUID</h1>
+uuidgen | tr '[:upper:]' '[:lower:]'
+
+<h1>Pretty print JSON</h1>
+echo '{"a":1}' | jq '.'
+
+<h1>Serve current directory</h1>
+python3 -m http.server 8000
+
+<h1>Check weather</h1>
+curl wttr.in/san-francisco
+</code>``
+
+<h2>Resources</h2>
+
+<h3>Documentation</h3>
+- Claude API: https://docs.anthropic.com
+- Next.js: https://nextjs.org/docs
+- Prisma: https://www.prisma.io/docs
+- AWS CLI: https://docs.aws.amazon.com/cli/
+
+<h3>Tools</h3>
+- Regex101: https://regex101.com
+- JWT.io: https://jwt.io
+- Crontab Guru: https://crontab.guru
+- ExplainShell: https://explainshell.com
+
+<h3>Learning</h3>
+- Claude Cookbook: https://github.com/anthropics/anthropic-cookbook
+- AWS Examples: https://github.com/aws-samples
+- TypeScript Playground: https://www.typescriptlang.org/play
+        </div>
+        
+        <footer class="footer">
+            <p>&copy; 2025 Candlefish AI LLC | <a href="https://candlefish.ai">candlefish.ai</a></p>
+        </footer>
+    </div>
+</body>
+</html>

@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security & Credentials Guide - Candlefish AI Documentation</title>
+    <meta name="description" content="Security & Credentials Guide for Claude Code development environment">
+    <meta property="og:title" content="Security & Credentials Guide - Candlefish AI">
+    <meta property="og:image" content="https://candlefish.ai/logo/candlefish_highquality.png">
+    <link rel="canonical" href="https://docs.candlefish.ai">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Berkeley+Mono&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Base styles from main site */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        :root {
+            --grid: 8px;
+            --container-max: 900px;
+            --color-black: #000000;
+            --color-white: #FFFFFF;
+            --color-teal: #00CED1;
+            --color-teal-dark: #00A5A8;
+            --color-gray-100: #0A0A0A;
+            --color-gray-200: #1A1A1A;
+            --color-gray-300: #2A2A2A;
+            --color-gray-400: #3A3A3A;
+            --color-gray-600: #8A8A8A;
+            --color-gray-700: #AAAAAA;
+            --font-mono: 'Berkeley Mono', 'Courier New', monospace;
+            --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+        
+        [data-theme="dark"] {
+            --bg-primary: var(--color-black);
+            --bg-secondary: var(--color-gray-100);
+            --bg-tertiary: var(--color-gray-200);
+            --text-primary: var(--color-white);
+            --text-secondary: var(--color-gray-700);
+            --text-tertiary: var(--color-gray-600);
+            --border-color: var(--color-gray-400);
+            --accent: var(--color-teal);
+        }
+        
+        body {
+            font-family: var(--font-sans);
+            font-size: 16px;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background-color: var(--bg-primary);
+            min-height: 100vh;
+        }
+        
+        /* Navigation */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: calc(var(--grid) * 3) 0;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .nav__container {
+            max-width: var(--container-max);
+            margin: 0 auto;
+            padding: 0 calc(var(--grid) * 3);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .nav__logo {
+            display: flex;
+            align-items: center;
+            gap: calc(var(--grid) * 2);
+            text-decoration: none;
+            color: var(--text-primary);
+        }
+        
+        .nav__logo img {
+            width: 40px;
+            height: 40px;
+        }
+        
+        /* Main content */
+        .doc-container {
+            max-width: var(--container-max);
+            margin: 0 auto;
+            padding: calc(var(--grid) * 15) calc(var(--grid) * 3);
+            min-height: 100vh;
+        }
+        
+        .doc-header {
+            margin-bottom: calc(var(--grid) * 6);
+            padding-bottom: calc(var(--grid) * 4);
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .doc-title {
+            font-size: 3rem;
+            font-weight: 300;
+            letter-spacing: -0.02em;
+            margin-bottom: calc(var(--grid) * 2);
+        }
+        
+        .doc-meta {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+        
+        /* Content styles */
+        .doc-content h1 {
+            font-size: 2.5rem;
+            font-weight: 300;
+            margin: calc(var(--grid) * 6) 0 calc(var(--grid) * 3) 0;
+            color: var(--accent);
+        }
+        
+        .doc-content h2 {
+            font-size: 2rem;
+            font-weight: 400;
+            margin: calc(var(--grid) * 5) 0 calc(var(--grid) * 2) 0;
+        }
+        
+        .doc-content h3 {
+            font-size: 1.5rem;
+            font-weight: 500;
+            margin: calc(var(--grid) * 4) 0 calc(var(--grid) * 2) 0;
+        }
+        
+        .doc-content h4 {
+            font-size: 1.25rem;
+            font-weight: 500;
+            margin: calc(var(--grid) * 3) 0 calc(var(--grid) * 2) 0;
+        }
+        
+        .doc-content p {
+            margin-bottom: calc(var(--grid) * 2);
+            color: var(--text-secondary);
+        }
+        
+        .doc-content ul, .doc-content ol {
+            margin: 0 0 calc(var(--grid) * 3) calc(var(--grid) * 3);
+            color: var(--text-secondary);
+        }
+        
+        .doc-content li {
+            margin-bottom: calc(var(--grid) * 1);
+        }
+        
+        .doc-content code {
+            font-family: var(--font-mono);
+            font-size: 0.875rem;
+            background: var(--bg-tertiary);
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: var(--accent);
+        }
+        
+        .doc-content pre {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: calc(var(--grid) * 3);
+            margin: calc(var(--grid) * 3) 0;
+            overflow-x: auto;
+        }
+        
+        .doc-content pre code {
+            background: none;
+            padding: 0;
+            color: var(--text-primary);
+            display: block;
+            line-height: 1.6;
+        }
+        
+        .doc-content blockquote {
+            border-left: 4px solid var(--accent);
+            padding-left: calc(var(--grid) * 3);
+            margin: calc(var(--grid) * 3) 0;
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+        
+        .doc-content a {
+            color: var(--accent);
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.2s;
+        }
+        
+        .doc-content a:hover {
+            border-bottom-color: var(--accent);
+        }
+        
+        .doc-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: calc(var(--grid) * 3) 0;
+        }
+        
+        .doc-content th, .doc-content td {
+            padding: calc(var(--grid) * 2);
+            border: 1px solid var(--border-color);
+            text-align: left;
+        }
+        
+        .doc-content th {
+            background: var(--bg-tertiary);
+            font-weight: 500;
+        }
+        
+        /* Back to docs link */
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: calc(var(--grid) * 1);
+            color: var(--text-secondary);
+            text-decoration: none;
+            margin-bottom: calc(var(--grid) * 4);
+            transition: color 0.2s;
+        }
+        
+        .back-link:hover {
+            color: var(--accent);
+        }
+        
+        /* Footer */
+        .footer {
+            margin-top: calc(var(--grid) * 10);
+            padding-top: calc(var(--grid) * 4);
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            color: var(--text-tertiary);
+            font-size: 0.875rem;
+        }
+        
+        .footer a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav__container">
+            <a href="index.html" class="nav__logo">
+                <img src="https://candlefish.ai/logo/candlefish_highquality.webp" alt="Candlefish AI">
+                <span>Documentation</span>
+            </a>
+        </div>
+    </nav>
+    
+    <!-- Main Content -->
+    <div class="doc-container">
+        <a href="index.html" class="back-link">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M19 12H5M12 19l-7-7 7-7"/>
+            </svg>
+            Back to Documentation
+        </a>
+        
+        <header class="doc-header">
+            <h1 class="doc-title">Security & Credentials Guide</h1>
+            <div class="doc-meta">By Patrick Smith (patrick@candlefish.ai) - Candlefish AI</div>
+        </header>
+        
+        <div class="doc-content">
+            <h1>Security and Credentials Management Guide</h1>
+
+<em>By Patrick Smith (patrick@candlefish.ai) - Candlefish AI</em>
+
+<h2>Overview</h2>
+
+<p>This guide covers comprehensive security practices and credential management for Jonathon's development environment. Follow these practices to maintain a secure development workflow.</p>
+
+<h2>Table of Contents</h2>
+
+<li><a href="#api-key-management">API Key Management</a></li>
+<li><a href="#aws-credentials">AWS Credentials</a></li>
+<li><a href="#environment-variables">Environment Variables</a></li>
+<li><a href="#ssh-keys">SSH Keys</a></li>
+<li><a href="#password-management">Password Management</a></li>
+<li><a href="#secret-storage-options">Secret Storage Options</a></li>
+<li><a href="#security-best-practices">Security Best Practices</a></li>
+<li><a href="#emergency-procedures">Emergency Procedures</a></li>
+
+<h2>API Key Management</h2>
+
+<h3>1. Obtaining API Keys</h3>
+
+<h4>Anthropic (Claude)</h4>
+<li>Visit https://console.anthropic.com</li>
+<li>Navigate to API Keys section</li>
+<li>Click "Create Key"</li>
+<li>Name your key (e.g., "Jonathon Development")</li>
+<li>Copy the key immediately (shown only once)</li>
+<li>Store securely using methods below</li>
+
+<h4>OpenAI</h4>
+<li>Visit https://platform.openai.com/api-keys</li>
+<li>Click "Create new secret key"</li>
+<li>Name your key descriptively</li>
+<li>Copy immediately</li>
+<li>Set usage limits to prevent overages</li>
+
+<h4>GitHub Personal Access Token</h4>
+<li>Visit https://github.com/settings/tokens</li>
+<li>Click "Generate new token (classic)"</li>
+<li>Select scopes:</li>
+   - <code>repo</code> (full control)
+   - <code>workflow</code> (GitHub Actions)
+   - <code>read:org</code> (organization access)
+<li>Set expiration (recommend 90 days)</li>
+<li>Generate and copy token</li>
+
+<h3>2. Secure Storage Methods</h3>
+
+<h4>Method 1: AWS Secrets Manager (Recommended)</h4>
+``<code>bash
+<h1>Store API key in AWS Secrets Manager</h1>
+aws secretsmanager create-secret \
+    --name "jonathon/anthropic-api-key" \
+    --secret-string "sk-ant-your-key-here"
+
+<h1>Retrieve API key</h1>
+aws secretsmanager get-secret-value \
+    --secret-id "jonathon/anthropic-api-key" \
+    --query SecretString --output text
+</code>`<code>
+
+<h4>Method 2: macOS Keychain</h4>
+</code>`<code>bash
+<h1>Store in Keychain</h1>
+security add-generic-password \
+    -a "$USER" \
+    -s "ANTHROPIC_API_KEY" \
+    -w "sk-ant-your-key-here"
+
+<h1>Retrieve from Keychain</h1>
+security find-generic-password \
+    -a "$USER" \
+    -s "ANTHROPIC_API_KEY" \
+    -w
+</code>`<code>
+
+<h4>Method 3: Encrypted File Storage</h4>
+</code>`<code>bash
+<h1>Create encrypted storage</h1>
+mkdir -p ~/.jonathon/secrets
+chmod 700 ~/.jonathon/secrets
+
+<h1>Encrypt API keys</h1>
+echo "ANTHROPIC_API_KEY=sk-ant-..." > ~/.jonathon/secrets/api-keys.env
+openssl enc -aes-256-cbc -salt -pbkdf2 \
+    -in ~/.jonathon/secrets/api-keys.env \
+    -out ~/.jonathon/secrets/api-keys.env.enc
+rm ~/.jonathon/secrets/api-keys.env
+
+<h1>Decrypt when needed</h1>
+openssl enc -aes-256-cbc -d -pbkdf2 \
+    -in ~/.jonathon/secrets/api-keys.env.enc \
+    -out ~/.jonathon/secrets/api-keys.env
+</code>`<code>
+
+<h3>3. Loading API Keys Securely</h3>
+
+<p>Create </code>~/.jonathon/scripts/load-secrets.sh<code>:
+</code>`<code>bash
+#!/bin/bash
+<h1>Secure secret loading script</h1></p>
+
+<h1>Function to load from AWS Secrets Manager</h1>
+load_from_aws() {
+    echo "Loading secrets from AWS Secrets Manager..."
+    
+    export ANTHROPIC_API_KEY=$(aws secretsmanager get-secret-value \
+        --secret-id "jonathon/anthropic-api-key" \
+        --query SecretString --output text 2>/dev/null)
+    
+    export OPENAI_API_KEY=$(aws secretsmanager get-secret-value \
+        --secret-id "jonathon/openai-api-key" \
+        --query SecretString --output text 2>/dev/null)
+    
+    export GITHUB_TOKEN=$(aws secretsmanager get-secret-value \
+        --secret-id "jonathon/github-token" \
+        --query SecretString --output text 2>/dev/null)
+}
+
+<h1>Function to load from Keychain</h1>
+load_from_keychain() {
+    echo "Loading secrets from macOS Keychain..."
+    
+    export ANTHROPIC_API_KEY=$(security find-generic-password \
+        -a "$USER" -s "ANTHROPIC_API_KEY" -w 2>/dev/null)
+    
+    export OPENAI_API_KEY=$(security find-generic-password \
+        -a "$USER" -s "OPENAI_API_KEY" -w 2>/dev/null)
+    
+    export GITHUB_TOKEN=$(security find-generic-password \
+        -a "$USER" -s "GITHUB_TOKEN" -w 2>/dev/null)
+}
+
+<h1>Function to load from encrypted file</h1>
+load_from_file() {
+    local secrets_file="$HOME/.jonathon/secrets/api-keys.env"
+    
+    if [ -f "${secrets_file}.enc" ]; then
+        echo "Enter encryption password:"
+        openssl enc -aes-256-cbc -d -pbkdf2 \
+            -in "${secrets_file}.enc" \
+            -out "${secrets_file}"
+        
+        source "${secrets_file}"
+        rm "${secrets_file}"  # Remove decrypted file immediately
+    fi
+}
+
+<h1>Try loading in order of preference</h1>
+if command -v aws &> /dev/null && aws sts get-caller-identity &> /dev/null; then
+    load_from_aws
+elif command -v security &> /dev/null; then
+    load_from_keychain
+else
+    load_from_file
+fi
+
+<h1>Verify loaded</h1>
+if [ -z "$ANTHROPIC_API_KEY" ]; then
+    echo "Warning: ANTHROPIC_API_KEY not loaded"
+else
+    echo "✓ ANTHROPIC_API_KEY loaded"
+fi
+
+<p>if [ -z "$OPENAI_API_KEY" ]; then
+    echo "Warning: OPENAI_API_KEY not loaded"
+else
+    echo "✓ OPENAI_API_KEY loaded"
+fi</p>
+
+<p>if [ -z "$GITHUB_TOKEN" ]; then
+    echo "Warning: GITHUB_TOKEN not loaded"
+else
+    echo "✓ GITHUB_TOKEN loaded"
+fi
+</code>`<code></p>
+
+<h2>AWS Credentials</h2>
+
+<h3>1. Initial Setup</h3>
+
+</code>`<code>bash
+<h1>Never use root account for daily work!</h1>
+<h1>Create IAM user instead</h1>
+
+<h1>Configure AWS CLI with IAM user</h1>
+aws configure
+<h1>AWS Access Key ID: AKIA...</h1>
+<h1>AWS Secret Access Key: ...</h1>
+<h1>Default region: us-east-1</h1>
+<h1>Default output: json</h1>
+</code>`<code>
+
+<h3>2. AWS Vault for Secure Storage</h3>
+
+</code>`<code>bash
+<h1>Install AWS Vault</h1>
+brew install aws-vault
+
+<h1>Add credentials to vault</h1>
+aws-vault add jonathon
+
+<h1>Use credentials</h1>
+aws-vault exec jonathon -- aws s3 ls
+
+<h1>Set as default for session</h1>
+aws-vault exec jonathon -- $SHELL
+</code>`<code>
+
+<h3>3. Credential Rotation</h3>
+
+</code>`<code>bash
+<h1>Rotate access keys monthly</h1>
+aws iam create-access-key --user-name jonathon-dev
+
+<h1>Update stored credentials</h1>
+aws-vault remove jonathon
+aws-vault add jonathon
+
+<h1>Delete old access key</h1>
+aws iam delete-access-key --user-name jonathon-dev \
+    --access-key-id OLDACCESSKEYID
+</code>`<code>
+
+<h2>Environment Variables</h2>
+
+<h3>1. Development Setup</h3>
+
+<p>Create </code>.env.local<code> (never commit this file):
+</code>`<code>bash
+<h1>API Keys</h1>
+ANTHROPIC_API_KEY=sk-ant-...
+OPENAI_API_KEY=sk-...
+GITHUB_TOKEN=ghp_...</p>
+
+<h1>Database</h1>
+DATABASE_URL=postgresql://user:pass@localhost:5432/jonathon
+
+<h1>AWS (if not using IAM roles)</h1>
+AWS_ACCESS_KEY_ID=AKIA...
+AWS_SECRET_ACCESS_KEY=...
+AWS_REGION=us-east-1
+
+<h1>Application Secrets</h1>
+NEXTAUTH_SECRET=$(openssl rand -base64 32)
+ENCRYPTION_KEY=$(openssl rand -hex 32)
+</code>`<code>
+
+<h3>2. Using direnv for Automatic Loading</h3>
+
+</code>`<code>bash
+<h1>Install direnv</h1>
+brew install direnv
+
+<h1>Add to shell</h1>
+echo 'eval "$(direnv hook zsh)"' >> ~/.zshrc
+
+<h1>Create .envrc in project</h1>
+cat > .envrc << 'EOF'
+<h1>Load secrets securely</h1>
+source ~/.jonathon/scripts/load-secrets.sh
+
+<h1>Project-specific overrides</h1>
+export NODE_ENV=development
+export LOG_LEVEL=debug
+EOF
+
+<h1>Allow direnv for this directory</h1>
+direnv allow
+</code>`<code>
+
+<h3>3. Production Environment Variables</h3>
+
+<p>Never hardcode production secrets. Use:
+- AWS Secrets Manager
+- Vercel Environment Variables
+- Heroku Config Vars
+- Docker Secrets</p>
+
+<h2>SSH Keys</h2>
+
+<h3>1. Generate SSH Keys</h3>
+
+</code>`<code>bash
+<h1>Ed25519 (recommended)</h1>
+ssh-keygen -t ed25519 -C "jonathon@example.com" \
+    -f ~/.ssh/jonathon_github
+
+<h1>RSA (fallback)</h1>
+ssh-keygen -t rsa -b 4096 -C "jonathon@example.com" \
+    -f ~/.ssh/jonathon_github_rsa
+</code>`<code>
+
+<h3>2. SSH Config</h3>
+
+<p>Create </code>~/.ssh/config<code>:
+</code>`<code>
+Host github.com
+    HostName github.com
+    User git
+    IdentityFile ~/.ssh/jonathon_github
+    AddKeysToAgent yes
+    UseKeychain yes</p>
+
+<p>Host jonathon-server
+    HostName your-server.com
+    User ubuntu
+    IdentityFile ~/.ssh/jonathon_server
+    Port 22
+    ForwardAgent yes
+</code>`<code></p>
+
+<h3>3. SSH Agent</h3>
+
+</code>`<code>bash
+<h1>Start SSH agent</h1>
+eval "$(ssh-agent -s)"
+
+<h1>Add keys to agent</h1>
+ssh-add --apple-use-keychain ~/.ssh/jonathon_github
+
+<h1>List loaded keys</h1>
+ssh-add -l
+</code>`<code>
+
+<h2>Password Management</h2>
+
+<h3>1. Generate Strong Passwords</h3>
+
+</code>`<code>bash
+<h1>Generate random password</h1>
+openssl rand -base64 32
+
+<h1>Generate memorable passphrase</h1>
+brew install pwgen
+pwgen -s 32 1
+
+<h1>Generate with specific requirements</h1>
+openssl rand -base64 32 | tr -d "=+/" | cut -c1-25
+</code>`<code>
+
+<h3>2. Password Storage</h3>
+
+<h4>Option 1: 1Password CLI</h4>
+</code>`<code>bash
+<h1>Install 1Password CLI</h1>
+brew install --cask 1password-cli
+
+<h1>Sign in</h1>
+op signin
+
+<h1>Create item</h1>
+op item create --category=login \
+    --title="Jonathon Dev" \
+    --vault="Development" \
+    username=admin \
+    password="$(openssl rand -base64 32)"
+
+<h1>Retrieve password</h1>
+op item get "Jonathon Dev" --field password
+</code>`<code>
+
+<h4>Option 2: macOS Keychain</h4>
+</code>`<code>bash
+<h1>Store password</h1>
+security add-generic-password \
+    -a "jonathon" \
+    -s "PostgreSQL Dev" \
+    -w
+
+<h1>Retrieve password</h1>
+security find-generic-password \
+    -a "jonathon" \
+    -s "PostgreSQL Dev" \
+    -w
+</code>`<code>
+
+<h2>Secret Storage Options</h2>
+
+<h3>1. Development Secrets</h3>
+
+</code>`<code>bash
+<h1>Local development hierarchy</h1>
+~/.jonathon/
+├── secrets/
+│   ├── api-keys.env.enc    # Encrypted API keys
+│   ├── aws-creds.enc       # Encrypted AWS credentials
+│   └── ssh-keys/           # SSH private keys
+├── config/
+│   └── development.yml     # Non-sensitive config
+└── scripts/
+    └── load-secrets.sh     # Secret loading script
+</code>`<code>
+
+<h3>2. Cloud Secret Storage</h3>
+
+<h4>AWS Secrets Manager</h4>
+</code>`<code>bash
+<h1>Store complex secret</h1>
+aws secretsmanager create-secret \
+    --name "jonathon/app-config" \
+    --secret-string '{
+        "database": {
+            "host": "localhost",
+            "port": 5432,
+            "name": "jonathon",
+            "user": "admin",
+            "password": "secure-password"
+        },
+        "redis": {
+            "url": "redis://localhost:6379"
+        }
+    }'
+
+<h1>Retrieve in application</h1>
+const AWS = require('aws-sdk');
+const client = new AWS.SecretsManager();
+
+<p>async function getSecret() {
+    const data = await client.getSecretValue({
+        SecretId: 'jonathon/app-config'
+    }).promise();
+    
+    return JSON.parse(data.SecretString);
+}
+</code>`<code></p>
+
+<h4>HashiCorp Vault</h4>
+</code>`<code>bash
+<h1>Install Vault</h1>
+brew install vault
+
+<h1>Start dev server</h1>
+vault server -dev
+
+<h1>Store secret</h1>
+vault kv put secret/jonathon \
+    anthropic_key="sk-ant-..." \
+    openai_key="sk-..."
+
+<h1>Retrieve secret</h1>
+vault kv get -format=json secret/jonathon
+</code>`<code>
+
+<h2>Security Best Practices</h2>
+
+<h3>1. Code Security</h3>
+
+</code>`<code>bash
+<h1>Pre-commit hook to prevent secrets</h1>
+cat > .git/hooks/pre-commit << 'EOF'
+#!/bin/bash
+
+<h1>Patterns to detect</h1>
+PATTERNS=(
+    "sk-[a-zA-Z0-9]{48}"           # Anthropic
+    "sk-[a-zA-Z0-9]{48}"           # OpenAI
+    "ghp_[a-zA-Z0-9]{36}"          # GitHub
+    "AKIA[0-9A-Z]{16}"             # AWS Access Key
+    "(?i)api[_-]?key"              # Generic API key
+    "(?i)secret"                   # Generic secret
+    "(?i)password"                 # Password
+)
+
+<h1>Check staged files</h1>
+for pattern in "${PATTERNS[@]}"; do
+    if git diff --staged --name-only -z | \
+       xargs -0 grep -E "$pattern" > /dev/null; then
+        echo "Error: Possible secret detected!"
+        echo "Pattern: $pattern"
+        echo "Please remove secrets before committing."
+        exit 1
+    fi
+done
+EOF
+
+<p>chmod +x .git/hooks/pre-commit
+</code>`<code></p>
+
+<h3>2. File Permissions</h3>
+
+</code>`<code>bash
+<h1>Secure file permissions</h1>
+chmod 600 ~/.ssh/jonathon_*        # SSH keys
+chmod 600 ~/.jonathon/secrets/*    # Secret files
+chmod 700 ~/.jonathon              # Secrets directory
+chmod 644 ~/.jonathon/config/*     # Config files
+</code>`<code>
+
+<h3>3. Audit and Monitoring</h3>
+
+</code>`<code>bash
+<h1>Check for exposed secrets in git history</h1>
+brew install git-secrets
+git secrets --install
+git secrets --register-aws
+
+<h1>Scan repository</h1>
+git secrets --scan
+
+<h1>Check file permissions</h1>
+find ~/.jonathon -type f -exec ls -l {} \; | \
+    awk '$1 !~ /^-rw-------/ { print "Insecure:", $NF }'
+</code>`<code>
+
+<h2>Emergency Procedures</h2>
+
+<h3>1. Compromised API Key</h3>
+
+</code>`<code>bash
+#!/bin/bash
+<h1>Emergency key rotation script</h1>
+
+<p>echo "⚠️  EMERGENCY: API Key Compromise Response"
+echo "========================================="</p>
+
+<h1>1. Revoke compromised keys immediately</h1>
+echo "1. Revoke keys in provider console:"
+echo "   - Anthropic: https://console.anthropic.com"
+echo "   - OpenAI: https://platform.openai.com"
+echo "   - GitHub: https://github.com/settings/tokens"
+
+<h1>2. Generate new keys</h1>
+echo "2. Generate new keys in each console"
+
+<h1>3. Update all systems</h1>
+echo "3. Updating stored secrets..."
+
+<h1>Update AWS Secrets Manager</h1>
+read -s -p "New Anthropic API Key: " new_anthropic_key
+aws secretsmanager update-secret \
+    --secret-id "jonathon/anthropic-api-key" \
+    --secret-string "$new_anthropic_key"
+
+<h1>4. Audit access logs</h1>
+echo "4. Check access logs for unauthorized usage"
+
+<h1>5. Notify team</h1>
+echo "5. Notify team members of key rotation"
+</code>`<code>
+
+<h3>2. Incident Response Checklist</h3>
+
+<p>- [ ] Identify compromised credential
+- [ ] Revoke access immediately
+- [ ] Generate new credentials
+- [ ] Update all systems using the credential
+- [ ] Audit logs for unauthorized access
+- [ ] Document incident and timeline
+- [ ] Review and improve security practices
+- [ ] Notify affected parties if required</p>
+
+<h3>3. Regular Security Audits</h3>
+
+</code>`<code>bash
+<h1>Monthly security audit script</h1>
+cat > ~/.jonathon/scripts/security-audit.sh << 'EOF'
+#!/bin/bash
+
+<p>echo "Jonathon Security Audit"
+echo "======================"
+date</p>
+
+<h1>Check for old API keys</h1>
+echo -e "\n1. Checking API key age..."
+<h1>Add logic to check key creation dates</h1>
+
+<h1>Check file permissions</h1>
+echo -e "\n2. Checking file permissions..."
+find ~/.jonathon -type f -name "<em>.env</em>" -exec ls -l {} \;
+
+<h1>Check for secrets in code</h1>
+echo -e "\n3. Scanning for exposed secrets..."
+git secrets --scan
+
+<h1>Check SSH key strength</h1>
+echo -e "\n4. Checking SSH keys..."
+for key in ~/.ssh/jonathon_*; do
+    if [[ -f "$key" && ! "$key" =~ \.pub$ ]]; then
+        ssh-keygen -l -f "$key"
+    fi
+done
+
+<h1>Check for unused credentials</h1>
+echo -e "\n5. Review unused credentials..."
+echo "   - Check AWS IAM for unused access keys"
+echo "   - Review GitHub personal access tokens"
+echo "   - Audit API key usage in provider dashboards"
+
+<p>echo -e "\nAudit complete. Review findings above."
+EOF</p>
+
+<p>chmod +x ~/.jonathon/scripts/security-audit.sh
+</code>`<code></p>
+
+<h2>Quick Reference Card</h2>
+
+<h3>Common Commands</h3>
+
+</code>`<code>bash
+<h1>Load all secrets</h1>
+source ~/.jonathon/scripts/load-secrets.sh
+
+<h1>Test API key</h1>
+curl -H "x-api-key: $ANTHROPIC_API_KEY" \
+     -H "anthropic-version: 2023-06-01" \
+     https://api.anthropic.com/v1/models
+
+<h1>Rotate AWS credentials</h1>
+aws-vault rotate jonathon
+
+<h1>Generate secure password</h1>
+openssl rand -base64 32
+
+<h1>Encrypt file</h1>
+openssl enc -aes-256-cbc -salt -pbkdf2 -in file.txt -out file.enc
+
+<h1>Decrypt file</h1>
+openssl enc -aes-256-cbc -d -pbkdf2 -in file.enc -out file.txt
+</code>``
+
+<h3>Security Checklist</h3>
+
+<p>Daily:
+- [ ] Use latest security patches
+- [ ] Lock screen when away
+- [ ] Use VPN on public WiFi</p>
+
+<p>Weekly:
+- [ ] Review access logs
+- [ ] Check for security updates
+- [ ] Backup encrypted secrets</p>
+
+<p>Monthly:
+- [ ] Rotate API keys
+- [ ] Run security audit
+- [ ] Review IAM permissions
+- [ ] Update passwords</p>
+
+<h2>Resources</h2>
+
+<p>- <a href="https://owasp.org">OWASP Security Guidelines</a>
+- <a href="https://aws.amazon.com/security/">AWS Security Best Practices</a>
+- <a href="https://docs.github.com/en/code-security">GitHub Security</a>
+- <a href="https://support.apple.com/guide/security/">macOS Security Guide</a></p>
+        </div>
+        
+        <footer class="footer">
+            <p>&copy; 2025 Candlefish AI LLC | <a href="https://candlefish.ai">candlefish.ai</a></p>
+        </footer>
+    </div>
+</body>
+</html>

@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Claude Code Setup Documentation - Candlefish AI</title>
+    <meta name="description" content="Complete documentation for setting up a professional Claude Code development environment with AWS integration and enterprise-grade security.">
+    <meta property="og:title" content="Claude Code Setup - Candlefish AI">
+    <meta property="og:description" content="Comprehensive guide for Claude Code development environment setup">
+    <meta property="og:image" content="https://candlefish.ai/logo/candlefish_highquality.png">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="author" content="Patrick Smith - Candlefish AI">
+    <link rel="canonical" href="https://docs.candlefish.ai">
+    
+    <!-- Preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Berkeley+Mono&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        /* CSS Reset & Base */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        :root {
+            /* Design Tokens */
+            --grid: 8px;
+            --section-padding: calc(var(--grid) * 20);
+            --container-max: 1440px;
+            
+            /* Color Schemes */
+            --color-black: #000000;
+            --color-white: #FFFFFF;
+            --color-teal: #00CED1;
+            --color-teal-dark: #00A5A8;
+            --color-teal-glow: rgba(0, 206, 209, 0.4);
+            --color-gray-100: #0A0A0A;
+            --color-gray-200: #1A1A1A;
+            --color-gray-300: #2A2A2A;
+            --color-gray-400: #3A3A3A;
+            --color-gray-500: #6A6A6A;
+            --color-gray-600: #8A8A8A;
+            --color-gray-700: #AAAAAA;
+            --color-gray-800: #CACACA;
+            --color-gray-900: #EAEAEA;
+            
+            /* Typography Scale */
+            --font-mono: 'Berkeley Mono', 'Courier New', monospace;
+            --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            
+            --text-xs: 0.75rem;
+            --text-sm: 0.875rem;
+            --text-base: 1rem;
+            --text-lg: 1.125rem;
+            --text-xl: 1.25rem;
+            --text-2xl: 1.5rem;
+            --text-3xl: 2rem;
+            --text-4xl: 2.5rem;
+            --text-5xl: 3rem;
+            
+            /* Animation Tokens */
+            --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+            --duration-fast: 200ms;
+            --duration-base: 400ms;
+            --duration-slow: 800ms;
+        }
+        
+        /* Theme Colors */
+        [data-theme="dark"] {
+            --bg-primary: var(--color-black);
+            --bg-secondary: var(--color-gray-100);
+            --bg-tertiary: var(--color-gray-200);
+            --text-primary: var(--color-white);
+            --text-secondary: var(--color-gray-700);
+            --text-tertiary: var(--color-gray-600);
+            --border-color: var(--color-gray-400);
+            --accent: var(--color-teal);
+            --accent-hover: var(--color-teal-dark);
+        }
+        
+        /* Base Styles */
+        html {
+            font-size: 16px;
+            scroll-behavior: smooth;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        
+        body {
+            font-family: var(--font-sans);
+            font-size: var(--text-base);
+            line-height: 1.6;
+            color: var(--text-primary);
+            background-color: var(--bg-primary);
+            min-height: 100vh;
+        }
+        
+        /* Navigation */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: calc(var(--grid) * 3) 0;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .nav__container {
+            max-width: var(--container-max);
+            margin: 0 auto;
+            padding: 0 calc(var(--grid) * 3);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .nav__logo {
+            display: flex;
+            align-items: center;
+            gap: calc(var(--grid) * 2);
+            text-decoration: none;
+            color: var(--text-primary);
+        }
+        
+        .nav__logo img {
+            width: 40px;
+            height: 40px;
+        }
+        
+        .nav__title {
+            font-size: var(--text-xl);
+            font-weight: 500;
+            letter-spacing: -0.02em;
+        }
+        
+        .nav__links {
+            display: flex;
+            gap: calc(var(--grid) * 4);
+        }
+        
+        .nav__link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: var(--text-sm);
+            transition: color var(--duration-fast) var(--ease-out);
+        }
+        
+        .nav__link:hover {
+            color: var(--accent);
+        }
+        
+        /* Main Content */
+        main {
+            margin-top: 80px;
+            min-height: calc(100vh - 80px);
+        }
+        
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+            padding: calc(var(--grid) * 10) 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200%;
+            height: 100%;
+            background: radial-gradient(circle at center, var(--color-teal-glow) 0%, transparent 50%);
+            opacity: 0.3;
+            pointer-events: none;
+        }
+        
+        .hero__container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 calc(var(--grid) * 3);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .hero__title {
+            font-size: var(--text-5xl);
+            font-weight: 300;
+            margin-bottom: calc(var(--grid) * 3);
+            letter-spacing: -0.03em;
+        }
+        
+        .hero__subtitle {
+            font-size: var(--text-xl);
+            color: var(--text-secondary);
+            margin-bottom: calc(var(--grid) * 6);
+            line-height: 1.8;
+        }
+        
+        .hero__cta {
+            display: inline-flex;
+            align-items: center;
+            gap: calc(var(--grid) * 2);
+            background: var(--accent);
+            color: var(--color-black);
+            padding: calc(var(--grid) * 2) calc(var(--grid) * 4);
+            border-radius: calc(var(--grid) * 1);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all var(--duration-fast) var(--ease-out);
+        }
+        
+        .hero__cta:hover {
+            background: var(--accent-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px var(--color-teal-glow);
+        }
+        
+        /* Documentation Grid */
+        .docs {
+            padding: calc(var(--grid) * 10) 0;
+            background: var(--bg-secondary);
+        }
+        
+        .docs__container {
+            max-width: var(--container-max);
+            margin: 0 auto;
+            padding: 0 calc(var(--grid) * 3);
+        }
+        
+        .docs__header {
+            text-align: center;
+            margin-bottom: calc(var(--grid) * 8);
+        }
+        
+        .docs__title {
+            font-size: var(--text-3xl);
+            margin-bottom: calc(var(--grid) * 2);
+        }
+        
+        .docs__description {
+            font-size: var(--text-lg);
+            color: var(--text-secondary);
+        }
+        
+        .docs__grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: calc(var(--grid) * 4);
+        }
+        
+        .doc-card {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: calc(var(--grid) * 2);
+            padding: calc(var(--grid) * 4);
+            transition: all var(--duration-fast) var(--ease-out);
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+        
+        .doc-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent);
+            box-shadow: 0 10px 40px rgba(0, 206, 209, 0.1);
+        }
+        
+        .doc-card__icon {
+            width: 48px;
+            height: 48px;
+            background: var(--accent);
+            border-radius: calc(var(--grid) * 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: calc(var(--grid) * 3);
+            font-size: var(--text-2xl);
+        }
+        
+        .doc-card__title {
+            font-size: var(--text-xl);
+            font-weight: 500;
+            margin-bottom: calc(var(--grid) * 2);
+        }
+        
+        .doc-card__description {
+            font-size: var(--text-sm);
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+        
+        /* Quick Start */
+        .quickstart {
+            padding: calc(var(--grid) * 10) 0;
+            background: var(--bg-primary);
+        }
+        
+        .quickstart__container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 calc(var(--grid) * 3);
+        }
+        
+        .quickstart__title {
+            font-size: var(--text-3xl);
+            text-align: center;
+            margin-bottom: calc(var(--grid) * 6);
+        }
+        
+        .code-block {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: calc(var(--grid) * 1);
+            padding: calc(var(--grid) * 3);
+            margin-bottom: calc(var(--grid) * 3);
+            overflow-x: auto;
+        }
+        
+        .code-block__header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: calc(var(--grid) * 2);
+            padding-bottom: calc(var(--grid) * 2);
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .code-block__title {
+            font-family: var(--font-mono);
+            font-size: var(--text-sm);
+            color: var(--text-secondary);
+        }
+        
+        .code-block__copy {
+            background: var(--accent);
+            color: var(--color-black);
+            border: none;
+            padding: calc(var(--grid) * 1) calc(var(--grid) * 2);
+            border-radius: calc(var(--grid) * 0.5);
+            font-size: var(--text-xs);
+            cursor: pointer;
+            transition: all var(--duration-fast) var(--ease-out);
+        }
+        
+        .code-block__copy:hover {
+            background: var(--accent-hover);
+        }
+        
+        .code-block__content {
+            font-family: var(--font-mono);
+            font-size: var(--text-sm);
+            line-height: 1.8;
+            color: var(--text-primary);
+        }
+        
+        .code-block__content .comment {
+            color: var(--text-tertiary);
+        }
+        
+        /* Footer */
+        .footer {
+            background: var(--bg-tertiary);
+            padding: calc(var(--grid) * 8) 0;
+            border-top: 1px solid var(--border-color);
+        }
+        
+        .footer__container {
+            max-width: var(--container-max);
+            margin: 0 auto;
+            padding: 0 calc(var(--grid) * 3);
+            text-align: center;
+        }
+        
+        .footer__text {
+            color: var(--text-secondary);
+            font-size: var(--text-sm);
+            margin-bottom: calc(var(--grid) * 2);
+        }
+        
+        .footer__link {
+            color: var(--accent);
+            text-decoration: none;
+            transition: color var(--duration-fast) var(--ease-out);
+        }
+        
+        .footer__link:hover {
+            color: var(--accent-hover);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero__title {
+                font-size: var(--text-4xl);
+            }
+            
+            .nav__links {
+                display: none;
+            }
+            
+            .docs__grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .fade-in {
+            animation: fadeIn var(--duration-slow) var(--ease-out) forwards;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav__container">
+            <a href="https://candlefish.ai" class="nav__logo">
+                <img src="https://candlefish.ai/logo/candlefish_highquality.webp" alt="Candlefish AI">
+                <span class="nav__title">Documentation</span>
+            </a>
+            <div class="nav__links">
+                <a href="https://candlefish.ai" class="nav__link">Main Site</a>
+                <a href="https://github.com/candlefish-ai/claude-setup" class="nav__link">GitHub</a>
+                <a href="mailto:patrick@candlefish.ai" class="nav__link">Contact</a>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Main Content -->
+    <main>
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero__container fade-in">
+                <h1 class="hero__title">Claude Code Development Environment</h1>
+                <p class="hero__subtitle">
+                    Complete setup guide for building AI-powered applications with Claude Code,
+                    AWS integration, and enterprise-grade security.
+                </p>
+                <a href="#quickstart" class="hero__cta">
+                    Get Started
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </a>
+            </div>
+        </section>
+        
+        <!-- Documentation Grid -->
+        <section class="docs">
+            <div class="docs__container">
+                <div class="docs__header">
+                    <h2 class="docs__title">Comprehensive Documentation</h2>
+                    <p class="docs__description">Everything you need to set up a professional AI development environment</p>
+                </div>
+                
+                <div class="docs__grid">
+                    <a href="complete-setup-guide.html" class="doc-card">
+                        <div class="doc-card__icon">📚</div>
+                        <h3 class="doc-card__title">Complete Setup Guide</h3>
+                        <p class="doc-card__description">
+                            Step-by-step instructions for setting up your entire development environment,
+                            from macOS configuration to Claude Code installation.
+                        </p>
+                    </a>
+                    
+                    <a href="security-guide.html" class="doc-card">
+                        <div class="doc-card__icon">🔐</div>
+                        <h3 class="doc-card__title">Security & Credentials</h3>
+                        <p class="doc-card__description">
+                            Best practices for managing API keys, AWS credentials, and implementing
+                            enterprise-grade security in your projects.
+                        </p>
+                    </a>
+                    
+                    <a href="quick-reference.html" class="doc-card">
+                        <div class="doc-card__icon">⚡</div>
+                        <h3 class="doc-card__title">Quick Reference</h3>
+                        <p class="doc-card__description">
+                            Essential commands, keyboard shortcuts, and common workflows
+                            for efficient development with Claude Code.
+                        </p>
+                    </a>
+                    
+                    <a href="aws-setup.html" class="doc-card">
+                        <div class="doc-card__icon">☁️</div>
+                        <h3 class="doc-card__title">AWS Setup</h3>
+                        <p class="doc-card__description">
+                            Complete guide to setting up AWS infrastructure including S3,
+                            Secrets Manager, DynamoDB, and CloudFormation.
+                        </p>
+                    </a>
+                    
+                    <a href="project-templates.html" class="doc-card">
+                        <div class="doc-card__icon">🚀</div>
+                        <h3 class="doc-card__title">Project Templates</h3>
+                        <p class="doc-card__description">
+                            Production-ready templates for Next.js, FastAPI, and more,
+                            with AI integration and best practices built-in.
+                        </p>
+                    </a>
+                    
+                    <a href="troubleshooting.html" class="doc-card">
+                        <div class="doc-card__icon">🛠️</div>
+                        <h3 class="doc-card__title">Troubleshooting</h3>
+                        <p class="doc-card__description">
+                            Common issues and solutions, debugging techniques,
+                            and performance optimization tips.
+                        </p>
+                    </a>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Quick Start -->
+        <section class="quickstart" id="quickstart">
+            <div class="quickstart__container">
+                <h2 class="quickstart__title">Quick Start</h2>
+                
+                <div class="code-block">
+                    <div class="code-block__header">
+                        <span class="code-block__title">Terminal</span>
+                        <button class="code-block__copy" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre class="code-block__content"><span class="comment"># 1. Clone the setup repository</span>
+git clone https://github.com/candlefish-ai/claude-setup.git
+cd claude-setup
+
+<span class="comment"># 2. Run the master setup script</span>
+./scripts/master-setup.sh
+
+<span class="comment"># 3. Start Claude Code</span>
+claude</pre>
+                </div>
+                
+                <div class="code-block">
+                    <div class="code-block__header">
+                        <span class="code-block__title">Create Your First Project</span>
+                        <button class="code-block__copy" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre class="code-block__content"><span class="comment"># Use the Candlefish AI template</span>
+./templates/create-candlefish-project.sh my-app
+
+<span class="comment"># Navigate to your project</span>
+cd my-app
+
+<span class="comment"># Install dependencies and start development</span>
+pnpm install
+pnpm dev</pre>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer__container">
+            <p class="footer__text">
+                &copy; 2025 Candlefish AI LLC. Documentation by 
+                <a href="mailto:patrick@candlefish.ai" class="footer__link">Patrick Smith</a>
+            </p>
+            <p class="footer__text">
+                <a href="https://candlefish.ai" class="footer__link">candlefish.ai</a> |
+                <a href="https://github.com/candlefish-ai" class="footer__link">GitHub</a> |
+                <a href="https://linkedin.com/company/candlefish-ai" class="footer__link">LinkedIn</a>
+            </p>
+        </div>
+    </footer>
+    
+    <script>
+        // Copy code functionality
+        function copyCode(button) {
+            const codeBlock = button.closest('.code-block');
+            const code = codeBlock.querySelector('.code-block__content').textContent;
+            
+            navigator.clipboard.writeText(code).then(() => {
+                const originalText = button.textContent;
+                button.textContent = 'Copied!';
+                button.style.background = '#059669';
+                
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.style.background = '';
+                }, 2000);
+            });
+        }
+        
+        // Add fade-in animation to elements as they come into view
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('fade-in');
+                }
+            });
+        }, observerOptions);
+        
+        document.querySelectorAll('.doc-card, .code-block').forEach(el => {
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>

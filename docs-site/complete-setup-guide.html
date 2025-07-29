@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete Setup Guide - Candlefish AI Documentation</title>
+    <meta name="description" content="Complete Setup Guide for Claude Code development environment">
+    <meta property="og:title" content="Complete Setup Guide - Candlefish AI">
+    <meta property="og:image" content="https://candlefish.ai/logo/candlefish_highquality.png">
+    <link rel="canonical" href="https://docs.candlefish.ai">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Berkeley+Mono&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Base styles from main site */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        :root {
+            --grid: 8px;
+            --container-max: 900px;
+            --color-black: #000000;
+            --color-white: #FFFFFF;
+            --color-teal: #00CED1;
+            --color-teal-dark: #00A5A8;
+            --color-gray-100: #0A0A0A;
+            --color-gray-200: #1A1A1A;
+            --color-gray-300: #2A2A2A;
+            --color-gray-400: #3A3A3A;
+            --color-gray-600: #8A8A8A;
+            --color-gray-700: #AAAAAA;
+            --font-mono: 'Berkeley Mono', 'Courier New', monospace;
+            --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+        
+        [data-theme="dark"] {
+            --bg-primary: var(--color-black);
+            --bg-secondary: var(--color-gray-100);
+            --bg-tertiary: var(--color-gray-200);
+            --text-primary: var(--color-white);
+            --text-secondary: var(--color-gray-700);
+            --text-tertiary: var(--color-gray-600);
+            --border-color: var(--color-gray-400);
+            --accent: var(--color-teal);
+        }
+        
+        body {
+            font-family: var(--font-sans);
+            font-size: 16px;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background-color: var(--bg-primary);
+            min-height: 100vh;
+        }
+        
+        /* Navigation */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: calc(var(--grid) * 3) 0;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .nav__container {
+            max-width: var(--container-max);
+            margin: 0 auto;
+            padding: 0 calc(var(--grid) * 3);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .nav__logo {
+            display: flex;
+            align-items: center;
+            gap: calc(var(--grid) * 2);
+            text-decoration: none;
+            color: var(--text-primary);
+        }
+        
+        .nav__logo img {
+            width: 40px;
+            height: 40px;
+        }
+        
+        /* Main content */
+        .doc-container {
+            max-width: var(--container-max);
+            margin: 0 auto;
+            padding: calc(var(--grid) * 15) calc(var(--grid) * 3);
+            min-height: 100vh;
+        }
+        
+        .doc-header {
+            margin-bottom: calc(var(--grid) * 6);
+            padding-bottom: calc(var(--grid) * 4);
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .doc-title {
+            font-size: 3rem;
+            font-weight: 300;
+            letter-spacing: -0.02em;
+            margin-bottom: calc(var(--grid) * 2);
+        }
+        
+        .doc-meta {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+        
+        /* Content styles */
+        .doc-content h1 {
+            font-size: 2.5rem;
+            font-weight: 300;
+            margin: calc(var(--grid) * 6) 0 calc(var(--grid) * 3) 0;
+            color: var(--accent);
+        }
+        
+        .doc-content h2 {
+            font-size: 2rem;
+            font-weight: 400;
+            margin: calc(var(--grid) * 5) 0 calc(var(--grid) * 2) 0;
+        }
+        
+        .doc-content h3 {
+            font-size: 1.5rem;
+            font-weight: 500;
+            margin: calc(var(--grid) * 4) 0 calc(var(--grid) * 2) 0;
+        }
+        
+        .doc-content h4 {
+            font-size: 1.25rem;
+            font-weight: 500;
+            margin: calc(var(--grid) * 3) 0 calc(var(--grid) * 2) 0;
+        }
+        
+        .doc-content p {
+            margin-bottom: calc(var(--grid) * 2);
+            color: var(--text-secondary);
+        }
+        
+        .doc-content ul, .doc-content ol {
+            margin: 0 0 calc(var(--grid) * 3) calc(var(--grid) * 3);
+            color: var(--text-secondary);
+        }
+        
+        .doc-content li {
+            margin-bottom: calc(var(--grid) * 1);
+        }
+        
+        .doc-content code {
+            font-family: var(--font-mono);
+            font-size: 0.875rem;
+            background: var(--bg-tertiary);
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: var(--accent);
+        }
+        
+        .doc-content pre {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: calc(var(--grid) * 3);
+            margin: calc(var(--grid) * 3) 0;
+            overflow-x: auto;
+        }
+        
+        .doc-content pre code {
+            background: none;
+            padding: 0;
+            color: var(--text-primary);
+            display: block;
+            line-height: 1.6;
+        }
+        
+        .doc-content blockquote {
+            border-left: 4px solid var(--accent);
+            padding-left: calc(var(--grid) * 3);
+            margin: calc(var(--grid) * 3) 0;
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+        
+        .doc-content a {
+            color: var(--accent);
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.2s;
+        }
+        
+        .doc-content a:hover {
+            border-bottom-color: var(--accent);
+        }
+        
+        .doc-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: calc(var(--grid) * 3) 0;
+        }
+        
+        .doc-content th, .doc-content td {
+            padding: calc(var(--grid) * 2);
+            border: 1px solid var(--border-color);
+            text-align: left;
+        }
+        
+        .doc-content th {
+            background: var(--bg-tertiary);
+            font-weight: 500;
+        }
+        
+        /* Back to docs link */
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: calc(var(--grid) * 1);
+            color: var(--text-secondary);
+            text-decoration: none;
+            margin-bottom: calc(var(--grid) * 4);
+            transition: color 0.2s;
+        }
+        
+        .back-link:hover {
+            color: var(--accent);
+        }
+        
+        /* Footer */
+        .footer {
+            margin-top: calc(var(--grid) * 10);
+            padding-top: calc(var(--grid) * 4);
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            color: var(--text-tertiary);
+            font-size: 0.875rem;
+        }
+        
+        .footer a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav__container">
+            <a href="index.html" class="nav__logo">
+                <img src="https://candlefish.ai/logo/candlefish_highquality.webp" alt="Candlefish AI">
+                <span>Documentation</span>
+            </a>
+        </div>
+    </nav>
+    
+    <!-- Main Content -->
+    <div class="doc-container">
+        <a href="index.html" class="back-link">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M19 12H5M12 19l-7-7 7-7"/>
+            </svg>
+            Back to Documentation
+        </a>
+        
+        <header class="doc-header">
+            <h1 class="doc-title">Complete Setup Guide</h1>
+            <div class="doc-meta">By Patrick Smith (patrick@candlefish.ai) - Candlefish AI</div>
+        </header>
+        
+        <div class="doc-content">
+            <h1>Jonathon's Complete Claude Code Setup Guide</h1>
+
+<em>By Patrick Smith (patrick@candlefish.ai) - Candlefish AI</em>
+
+<h2>Overview</h2>
+
+<p>This guide provides a comprehensive walkthrough for setting up a complete Claude Code development environment from scratch. It covers everything from initial Mac setup to advanced Claude Code configurations.</p>
+
+<h2>Table of Contents</h2>
+
+<li><a href="#prerequisites">Prerequisites</a></li>
+<li><a href="#initial-mac-setup">Initial Mac Setup</a></li>
+<li><a href="#core-tools-installation">Core Tools Installation</a></li>
+<li><a href="#claude-code-installation">Claude Code Installation</a></li>
+<li><a href="#aws-account-setup">AWS Account Setup</a></li>
+<li><a href="#development-environment">Development Environment</a></li>
+<li><a href="#project-templates">Project Templates</a></li>
+<li><a href="#security--credentials">Security & Credentials</a></li>
+<li><a href="#advanced-configuration">Advanced Configuration</a></li>
+<li><a href="#troubleshooting">Troubleshooting</a></li>
+
+<h2>Prerequisites</h2>
+
+<h3>System Requirements</h3>
+- macOS 12.0 or later
+- 8GB RAM minimum (16GB recommended)
+- 20GB free disk space
+- Admin access to your Mac
+
+<h3>Accounts Needed</h3>
+- [ ] Anthropic Console account
+- [ ] AWS account (new one will be created)
+- [ ] GitHub account
+- [ ] OpenAI account (optional)
+
+<h2>Initial Mac Setup</h2>
+
+<h3>1. Install Xcode Command Line Tools</h3>
+``<code>bash
+xcode-select --install
+</code>`<code>
+
+<h3>2. Install Homebrew</h3>
+</code>`<code>bash
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+</code>`<code>
+
+<h3>3. Configure Shell</h3>
+Add Homebrew to your PATH:
+</code>`<code>bash
+echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zshrc
+source ~/.zshrc
+</code>`<code>
+
+<h2>Core Tools Installation</h2>
+
+<h3>Essential Command Line Tools</h3>
+</code>`<code>bash
+<h1>Package managers and build tools</h1>
+brew install git curl wget jq
+
+<h1>Modern CLI tools</h1>
+brew install ripgrep fd bat eza gh httpie tree tmux direnv
+
+<h1>Development tools</h1>
+brew install node nvm python@3.12 go rust
+</code>`<code>
+
+<h3>Node.js Setup</h3>
+</code>`<code>bash
+<h1>Install nvm (Node Version Manager)</h1>
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
+
+<h1>Add to shell</h1>
+echo 'export NVM_DIR="$HOME/.nvm"' >> ~/.zshrc
+echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> ~/.zshrc
+source ~/.zshrc
+
+<h1>Install Node.js</h1>
+nvm install 20
+nvm use 20
+nvm alias default 20
+
+<h1>Install global packages</h1>
+npm install -g pnpm typescript tsx nodemon pm2
+</code>`<code>
+
+<h2>Claude Code Installation</h2>
+
+<h3>1. Install Claude Code Package</h3>
+</code>`<code>bash
+<h1>Install latest Claude Code</h1>
+npm install -g @anthropic-ai/claude-code@latest
+
+<h1>Verify installation</h1>
+claude-code --version
+</code>`<code>
+
+<h3>2. Create Directory Structure</h3>
+</code>`<code>bash
+<h1>Create Claude directories</h1>
+mkdir -p ~/.claude/{bin,config,projects,sessions,metrics,commands,templates}
+
+<h1>Create project directories</h1>
+mkdir -p ~/projects/{personal,work,experiments}
+</code>`<code>
+
+<h3>3. Configure Claude Code</h3>
+
+<p>Create </code>~/.claude/config.yml<code>:
+</code>`<code>yaml
+<h1>Claude Code Configuration</h1>
+defaultModel: claude-opus-4-20250514
+defaultContext: 100000
+maximumContext: 200000</p>
+
+<h1>Access permissions</h1>
+webAccessUnrestricted: true
+fileSystemAccessUnrestricted: true
+allowUnmentionedDomains: true
+allowUnmentionedPaths: true
+
+<h1>Tool permissions</h1>
+allowedTools:
+  - "Bash(git *)"
+  - "Bash(python3 *)"
+  - "Bash(pip *)"
+  - "Bash(npm *)"
+  - "Bash(pnpm *)"
+  - "Bash(curl *)"
+  - "Bash(wget *)"
+  - "Bash(httpie *)"
+  - "Bash(aws *)"
+  - "Bash(docker *)"
+
+<h1>Project settings</h1>
+projectRoot: "$HOME/projects"
+autoTrust: true
+
+<h1>Performance</h1>
+enableCaching: true
+parallelToolCalls: true
+
+<h1>Logging</h1>
+logLevel: info
+metricsEnabled: true
+</code>`<code>
+
+<h3>4. Create Wrapper Scripts</h3>
+
+<p>Create </code>~/.claude/bin/claude<code>:
+</code>`<code>bash
+#!/bin/bash
+<h1>Claude Code wrapper with enhanced features</h1></p>
+
+<h1>Default to Opus 4 model</h1>
+export CLAUDE_DEFAULT_MODEL="claude-opus-4-20250514"
+
+<h1>Load API keys if available</h1>
+if [ -f "$HOME/.claude/api-keys.env" ]; then
+    source "$HOME/.claude/api-keys.env"
+fi
+
+<h1>Execute Claude Code with enhanced options</h1>
+exec claude-code "$@"
+</code>`<code>
+
+<p>Create </code>~/.claude/bin/claude-max<code>:
+</code>`<code>bash
+#!/bin/bash
+<h1>Claude with maximum context window</h1>
+exec claude-code --context 200k "$@"
+</code>`<code></p>
+
+<p>Create </code>~/.claude/bin/claude-think<code>:
+</code>`<code>bash
+#!/bin/bash
+<h1>Claude with step-by-step thinking</h1>
+exec claude-code --thinking "$@"
+</code>`<code></p>
+
+<p>Make scripts executable:
+</code>`<code>bash
+chmod +x ~/.claude/bin/*
+</code>`<code></p>
+
+<h3>5. Configure Shell Aliases</h3>
+
+<p>Add to </code>~/.zshrc<code>:
+</code>`<code>bash
+<h1>Claude Code Configuration</h1>
+export CLAUDE_HOME="$HOME/.claude"
+export PATH="$CLAUDE_HOME/bin:$PATH"</p>
+
+<h1>Aliases</h1>
+alias c='claude'
+alias cmax='claude-max'
+alias cthink='claude-think'
+alias cc='claude-code'
+
+<h1>Functions</h1>
+claude-project() {
+    local project_name="$1"
+    if [ -z "$project_name" ]; then
+        echo "Usage: claude-project <project-name>"
+        return 1
+    fi
+    
+    cd "$HOME/projects/$project_name" && claude
+}
+
+<h1>Quick project navigation</h1>
+alias projects='cd ~/projects'
+alias projects='cd ~/projects'
+</code>`<code>
+
+<h2>AWS Account Setup</h2>
+
+<h3>1. Create AWS Account</h3>
+<li>Go to https://aws.amazon.com</li>
+<li>Click "Create an AWS Account"</li>
+<li>Follow the signup process</li>
+<li>Enable MFA on root account</li>
+
+<h3>2. Create IAM User</h3>
+</code>`<code>bash
+<h1>After installing AWS CLI</h1>
+brew install awscli
+
+<h1>Configure with root credentials temporarily</h1>
+aws configure
+
+<h1>Create admin user</h1>
+aws iam create-user --user-name jonathon-admin
+aws iam attach-user-policy --user-name jonathon-admin \
+    --policy-arn arn:aws:iam::aws:policy/AdministratorAccess
+
+<h1>Create access key</h1>
+aws iam create-access-key --user-name jonathon-admin
+</code>`<code>
+
+<h3>3. Configure AWS CLI</h3>
+</code>`<code>bash
+<h1>Configure with new IAM user</h1>
+aws configure
+<h1>Enter the Access Key ID and Secret Access Key from the previous step</h1>
+<h1>Default region: us-east-1</h1>
+<h1>Default output: json</h1>
+</code>`<code>
+
+<h3>4. Set Up AWS Resources</h3>
+
+<p>Create S3 bucket for projects:
+</code>`<code>bash
+aws s3 mb s3://jonathon-projects-$(date +%s)
+</code>`<code></p>
+
+<p>Create Secrets Manager for API keys:
+</code>`<code>bash
+<h1>Create a secret for API keys</h1>
+aws secretsmanager create-secret \
+    --name "jonathon/api-keys" \
+    --description "API keys for Jonathon's projects" \
+    --secret-string '{
+        "ANTHROPIC_API_KEY": "your-key-here",
+        "OPENAI_API_KEY": "your-key-here",
+        "GITHUB_TOKEN": "your-token-here"
+    }'
+</code>`<code></p>
+
+<h3>5. Install AWS Tools</h3>
+</code>`<code>bash
+<h1>AWS session manager</h1>
+brew install aws-vault
+
+<h1>AWS SAM for serverless</h1>
+brew install aws-sam-cli
+
+<h1>AWS CDK</h1>
+npm install -g aws-cdk
+</code>`<code>
+
+<h2>Development Environment</h2>
+
+<h3>1. VS Code Installation</h3>
+</code>`<code>bash
+<h1>Install VS Code</h1>
+brew install --cask visual-studio-code
+
+<h1>Install extensions</h1>
+code --install-extension ms-python.python
+code --install-extension dbaeumer.vscode-eslint
+code --install-extension esbenp.prettier-vscode
+code --install-extension GitHub.copilot
+code --install-extension GitHub.copilot-chat
+code --install-extension ms-vscode.typescript-language-features
+code --install-extension bradlc.vscode-tailwindcss
+code --install-extension prisma.prisma
+code --install-extension GraphQL.vscode-graphql
+code --install-extension amazonwebservices.aws-toolkit-vscode
+</code>`<code>
+
+<h3>2. Database Setup</h3>
+</code>`<code>bash
+<h1>PostgreSQL</h1>
+brew install postgresql@16
+brew services start postgresql@16
+
+<h1>Redis</h1>
+brew install redis
+brew services start redis
+
+<h1>Database GUI</h1>
+brew install --cask tableplus
+</code>`<code>
+
+<h3>3. Container Tools</h3>
+</code>`<code>bash
+<h1>Docker Desktop</h1>
+brew install --cask docker
+
+<h1>Container tools</h1>
+brew install docker-compose lazydocker
+</code>`<code>
+
+<h3>4. API Testing Tools</h3>
+</code>`<code>bash
+<h1>Postman</h1>
+brew install --cask postman
+
+<h1>Command line tools</h1>
+brew install httpie curl jq
+</code>`<code>
+
+<h2>Project Templates</h2>
+
+<h3>1. Next.js + TypeScript Template</h3>
+
+<p>Create </code>~/.claude/templates/create-nextjs-project.sh<code>:
+</code>`<code>bash
+#!/bin/bash
+<h1>Create a new Next.js project with Candlefish AI standards</h1></p>
+
+<p>project_name="$1"
+if [ -z "$project_name" ]; then
+    read -p "Enter project name: " project_name
+fi</p>
+
+<h1>Create project</h1>
+pnpm create next-app@latest "$project_name" \
+    --typescript \
+    --tailwind \
+    --eslint \
+    --app \
+    --no-src-dir \
+    --import-alias "@/*"
+
+<p>cd "$project_name"</p>
+
+<h1>Install additional dependencies</h1>
+pnpm add @anthropic-ai/sdk openai zod prisma @prisma/client
+pnpm add -D @types/node prettier eslint-config-prettier
+
+<h1>Create project structure</h1>
+mkdir -p {services,lib,components,hooks,utils,types}
+
+<h1>Initialize Prisma</h1>
+pnpm prisma init
+
+<h1>Create basic service structure</h1>
+cat > services/ai/claude.service.ts << 'EOF'
+import Anthropic from '@anthropic-ai/sdk';
+
+<p>export class ClaudeService {
+  private client: Anthropic;</p>
+
+<p>  constructor(apiKey: string) {
+    this.client = new Anthropic({ apiKey });
+  }</p>
+
+<p>  async generateCompletion(prompt: string) {
+    const response = await this.client.messages.create({
+      model: 'claude-opus-4-20250514',
+      messages: [{ role: 'user', content: prompt }],
+      max_tokens: 4096,
+    });
+    
+    return response.content[0].text;
+  }
+}
+EOF</p>
+
+<h1>Create environment file</h1>
+cat > .env.local << EOE
+<h1>API Keys</h1>
+ANTHROPIC_API_KEY=
+OPENAI_API_KEY=
+
+<h1>Database</h1>
+DATABASE_URL="postgresql://localhost:5432/$project_name"
+
+<h1>NextAuth</h1>
+NEXTAUTH_URL=http://localhost:3000
+NEXTAUTH_SECRET=$(openssl rand -base64 32)
+EOE
+
+<h1>Initialize git</h1>
+git init
+git add .
+git commit -m "Initial commit: $project_name"
+
+<p>echo "Project $project_name created successfully!"
+echo "Next steps:"
+echo "  cd $project_name"
+echo "  pnpm dev"
+</code>`<code></p>
+
+<p>Make executable:
+</code>`<code>bash
+chmod +x ~/.claude/templates/*.sh
+</code>`<code></p>
+
+<h3>2. Python FastAPI Template</h3>
+
+<p>Create </code>~/.claude/templates/create-python-project.sh<code>:
+</code>`<code>bash
+#!/bin/bash
+<h1>Create a new Python project with Candlefish AI standards</h1></p>
+
+<p>project_name="$1"
+if [ -z "$project_name" ]; then
+    read -p "Enter project name: " project_name
+fi</p>
+
+<p>mkdir "$project_name"
+cd "$project_name"</p>
+
+<h1>Initialize poetry</h1>
+poetry init -n \
+    --name "$project_name" \
+    --dependency fastapi \
+    --dependency uvicorn \
+    --dependency anthropic \
+    --dependency openai \
+    --dependency pydantic \
+    --dependency python-dotenv \
+    --dev-dependency pytest \
+    --dev-dependency black \
+    --dev-dependency ruff
+
+<h1>Install dependencies</h1>
+poetry install
+
+<h1>Create project structure</h1>
+mkdir -p {app,services,models,utils,tests}
+
+<h1>Create main app</h1>
+cat > app/main.py << 'EOF'
+from fastapi import FastAPI
+from pydantic import BaseModel
+import anthropic
+
+<p>app = FastAPI(title="Jonathon's API")</p>
+
+<p>class GenerateRequest(BaseModel):
+    prompt: str
+    model: str = "claude-opus-4-20250514"</p>
+
+<p>@app.post("/generate")
+async def generate(request: GenerateRequest):
+    # Implementation here
+    return {"message": "Generated"}</p>
+
+<p>@app.get("/health")
+async def health():
+    return {"status": "healthy"}
+EOF</p>
+
+<h1>Create .env file</h1>
+cat > .env << EOF
+ANTHROPIC_API_KEY=
+OPENAI_API_KEY=
+EOF
+
+<h1>Initialize git</h1>
+git init
+echo ".env" > .gitignore
+echo "__pycache__/" >> .gitignore
+echo ".pytest_cache/" >> .gitignore
+git add .
+git commit -m "Initial commit: $project_name"
+
+<p>echo "Project $project_name created successfully!"
+</code>`<code></p>
+
+<h2>Security & Credentials</h2>
+
+<h3>1. API Key Management</h3>
+
+<p>Create </code>~/.claude/scripts/setup-api-keys.sh<code>:
+</code>`<code>bash
+#!/bin/bash
+<h1>Secure API key setup</h1></p>
+
+<p>echo "Setting up API keys securely..."</p>
+
+<h1>Create secure directory</h1>
+mkdir -p ~/.claude/secrets
+chmod 700 ~/.claude/secrets
+
+<h1>Get API keys</h1>
+read -s -p "Enter Anthropic API Key: " anthropic_key
+echo
+read -s -p "Enter OpenAI API Key (optional): " openai_key
+echo
+read -s -p "Enter GitHub Token: " github_token
+echo
+
+<h1>Store in AWS Secrets Manager</h1>
+aws secretsmanager create-secret \
+    --name "claude-code/api-keys" \
+    --secret-string "{
+        \"ANTHROPIC_API_KEY\": \"$anthropic_key\",
+        \"OPENAI_API_KEY\": \"$openai_key\",
+        \"GITHUB_TOKEN\": \"$github_token\"
+    }" || \
+aws secretsmanager update-secret \
+    --secret-id "claude-code/api-keys" \
+    --secret-string "{
+        \"ANTHROPIC_API_KEY\": \"$anthropic_key\",
+        \"OPENAI_API_KEY\": \"$openai_key\",
+        \"GITHUB_TOKEN\": \"$github_token\"
+    }"
+
+<h1>Create local env file (encrypted)</h1>
+cat > ~/.claude/secrets/api-keys.env << EOF
+export ANTHROPIC_API_KEY="$anthropic_key"
+export OPENAI_API_KEY="$openai_key"
+export GITHUB_TOKEN="$github_token"
+EOF
+
+<p>chmod 600 ~/.claude/secrets/api-keys.env</p>
+
+<p>echo "API keys stored securely!"
+</code>`<code></p>
+
+<h3>2. SSH Key Setup</h3>
+</code>`<code>bash
+<h1>Generate SSH key for GitHub</h1>
+ssh-keygen -t ed25519 -C "your-email@example.com" -f ~/.ssh/jonathon_github
+
+<h1>Add to SSH agent</h1>
+ssh-add ~/.ssh/jonathon_github
+
+<h1>Display public key to add to GitHub</h1>
+cat ~/.ssh/jonathon_github.pub
+</code>`<code>
+
+<h3>3. Git Configuration</h3>
+</code>`<code>bash
+<h1>Configure git</h1>
+git config --global user.name "Your Name"
+git config --global user.email "your-email@example.com"
+git config --global init.defaultBranch main
+git config --global pull.rebase true
+</code>`<code>
+
+<h2>Advanced Configuration</h2>
+
+<h3>1. Claude Code Custom Commands</h3>
+
+<p>Create </code>~/.claude/commands/analyze.yml<code>:
+</code>`<code>yaml
+name: analyze
+description: Analyze codebase and provide insights
+prompt: |
+  Analyze the current codebase and provide:
+  1. Architecture overview
+  2. Code quality assessment
+  3. Security considerations
+  4. Performance optimizations
+  5. Suggested improvements
+</code>`<code></p>
+
+<h3>2. Project-Specific Configuration</h3>
+
+<p>Create </code>~/.claude/projects/jonathon/.claude.yml<code>:
+</code>`<code>yaml
+<h1>Project-specific Claude configuration</h1>
+defaultModel: claude-opus-4-20250514
+context: 200000</p>
+
+<h1>Custom instructions</h1>
+instructions: |
+  - Follow Candlefish AI coding standards
+  - Use TypeScript strict mode
+  - Implement comprehensive error handling
+  - Add JSDoc comments for public APIs
+  - Write tests for all new features
+
+<h1>Auto-imports</h1>
+imports:
+  - "@/services"
+  - "@/lib"
+  - "@/types"
+</code>`<code>
+
+<h3>3. Performance Optimization</h3>
+
+<p>Create </code>~/.claude/config/performance.yml<code>:
+</code>`<code>yaml
+<h1>Performance settings</h1>
+cache:
+  enabled: true
+  ttl: 3600
+  maxSize: 1GB</p>
+
+<p>parallel:
+  maxConcurrent: 10
+  timeout: 30000</p>
+
+<p>memory:
+  maxHeap: 4GB
+  gcInterval: 300
+</code>`<code></p>
+
+<h2>Troubleshooting</h2>
+
+<h3>Common Issues</h3>
+
+<h4>1. Claude Code not found</h4>
+</code>`<code>bash
+<h1>Check installation</h1>
+npm list -g @anthropic-ai/claude-code
+
+<h1>Reinstall if needed</h1>
+npm uninstall -g @anthropic-ai/claude-code
+npm install -g @anthropic-ai/claude-code@latest
+</code>`<code>
+
+<h4>2. Permission errors</h4>
+</code>`<code>bash
+<h1>Fix permissions</h1>
+sudo chown -R $(whoami) ~/.claude
+chmod -R 755 ~/.claude
+</code>`<code>
+
+<h4>3. API key issues</h4>
+</code>`<code>bash
+<h1>Test API key</h1>
+curl -X POST https://api.anthropic.com/v1/messages \
+  -H "x-api-key: $ANTHROPIC_API_KEY" \
+  -H "anthropic-version: 2023-06-01" \
+  -H "content-type: application/json" \
+  -d '{
+    "model": "claude-3-haiku-20240307",
+    "messages": [{"role": "user", "content": "Hello"}],
+    "max_tokens": 10
+  }'
+</code>`<code>
+
+<h3>Debug Mode</h3>
+</code>`<code>bash
+<h1>Run Claude Code in debug mode</h1>
+CLAUDE_DEBUG=true claude-code
+
+<h1>Check logs</h1>
+tail -f ~/.claude/logs/claude.log
+</code>`<code>
+
+<h3>Reset Configuration</h3>
+</code>`<code>bash
+<h1>Backup current config</h1>
+cp -r ~/.claude ~/.claude.backup
+
+<h1>Reset to defaults</h1>
+rm -rf ~/.claude
+claude-code --init
+</code>`<code>
+
+<h2>Quick Reference</h2>
+
+<h3>Essential Commands</h3>
+</code>`<code>bash
+<h1>Start Claude Code</h1>
+c                     # Quick start
+claude                # Standard start
+claude-max            # Max context (200k)
+claude-think          # Thinking mode
+
+<h1>Project commands</h1>
+claude-project myapp  # Open project
+claude --cwd ./path   # Specific directory
+
+<h1>Configuration</h1>
+claude --config       # Show config
+claude --version      # Show version
+</code>`<code>
+
+<h3>Keyboard Shortcuts</h3>
+- </code>Ctrl+C<code> - Cancel current operation
+- </code>Ctrl+D<code> - Exit Claude Code
+- </code>Ctrl+L<code> - Clear screen
+- </code>Ctrl+R<code> - Search command history
+
+<h3>Model Selection</h3>
+</code>`<code>bash
+<h1>Use specific model</h1>
+claude --model claude-opus-4-20250514
+claude --model claude-3-5-sonnet-20241022
+claude --model claude-3-haiku-20240307
+</code>`<code>
+
+<h3>Context Window</h3>
+</code>`<code>bash
+<h1>Set context size</h1>
+claude --context 50k    # 50,000 tokens
+claude --context 100k   # 100,000 tokens
+claude --context 200k   # 200,000 tokens (max)
+</code>`<code>
+
+<h2>Next Steps</h2>
+
+<li><strong>Get API Keys</strong></li>
+   - Anthropic: https://console.anthropic.com/api-keys
+   - OpenAI: https://platform.openai.com/api-keys
+   - GitHub: https://github.com/settings/tokens
+
+<li><strong>Join Communities</strong></li>
+   - Claude Discord: https://discord.gg/anthropic
+   - Candlefish AI Support: patrick@candlefish.ai
+
+<li><strong>Explore Resources</strong></li>
+   - Claude Cookbook: https://github.com/anthropics/anthropic-cookbook
+   - API Documentation: https://docs.anthropic.com
+   - Community Projects: https://github.com/topics/claude-ai
+
+<li><strong>Start Building</strong></li>
+   - Create your first project: </code>~/.claude/templates/create-nextjs-project.sh myapp<code>
+   - Explore Claude's capabilities: </code>claude`
+   - Build something amazing!
+
+<p>---</p>
+
+<h2>Support</h2>
+
+<p>For issues or questions:
+- GitHub Issues: https://github.com/candlefish-ai/claude-setup
+- Email: patrick@candlefish.ai
+- Documentation: https://docs.candlefish.ai</p>
+        </div>
+        
+        <footer class="footer">
+            <p>&copy; 2025 Candlefish AI LLC | <a href="https://candlefish.ai">candlefish.ai</a></p>
+        </footer>
+    </div>
+</body>
+</html>

@@ -1,0 +1,45 @@
+# Dependencies
+node_modules/
+*.log
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Build outputs
+dist/
+build/
+.next/
+out/
+
+# Credentials
+*.pem
+*.key
+*-credentials.json
+secrets/
+
+# Temporary
+tmp/
+temp/
+*.tmp
+*.bak
+
+# Python
+__pycache__/
+*.py[cod]
+venv/
+.venv/
+
+# Netlify
+.netlify/
